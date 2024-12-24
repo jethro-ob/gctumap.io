@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Sharing App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+    <style>
+        .app-container {
+            margin: 20px auto;
+            background: #f8f9fa;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: #0d6efd;
+            color: white;
+            padding: 15px;
+        }
+
+        .search-bar {
+            background: #0d6efd;
+            padding: 10px 15px;
+        }
+
+        .search-input {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            padding: 8px 15px;
+            width: 100%;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .user-list {
+            padding: 15px;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .user-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background: #e9ecef;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-status {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+
+        .location-prompt {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .location-icon {
+            width: 80px;
+            height: 80px;
+            background: #e9ecef;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #0d6efd;
+        }
+
+        .nav-bar {
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #dee2e6;
+            ;
+        }
+
+        .nav-item {
+            color: #6c757d;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .nav-item.active {
+            color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Chat View -->
+        <div class="chat-view" id="chatView">
+            <div class="header">
+                <h5 class="mb-0">Send Location</h5>
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search by username...">
+            </div>
+            <div class="user-list">
+                <div class="user-item" data-bs-toggle="modal" data-bs-target="#locationModal">
+                    <div class="user-avatar">
+                        <i class="fas fa-map-marker-alt m-2"></i>
+                    </div>
+                    <div class="user-info">                    
+                        <div class="user-name">My Campus Location</div>
+                        <div class="user-status">Share your location to friends</div>
+                    </div>                    
+                    <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+               <div>Friends</div>
+                <!-- Sample users -->
+                <div class="user-item">
+                    <div class="user-avatar">
+                        <i class="fas fa-user m-2"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">Speedo</div>
+                        <div class="user-status">Online</div>
+                    </div>
+                </div>
+                <div class="user-item">
+                    <div class="user-avatar">
+                        <i class="fas fa-user m-2"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">Karen Dean</div>
+                        <div class="user-status">Online</div>
+                    </div>
+                </div>
+                <div class="user-item">
+                    <div class="user-avatar">
+                        <i class="fas fa-user m-2"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">Sneakout</div>
+                        <div class="user-status">Online</div>
+                    </div>
+                </div>
+                <div class="user-item">
+                    <div class="user-avatar">
+                        <i class="fas fa-user m-2"></i>
+                    </div>
+                    
+                    <div class="user-info">
+                        <div class="user-name">Donna Hunter</div>
+                        <div class="user-status">Last seen 2h ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Modal -->
+        <div class="modal fade" id="locationModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="location-prompt">
+                            <div class="location-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h5>Put yourself on the map!</h5>
+                            <p class="text-muted">Share your location to show up with everyone on the campus! They'll see your location and real-time location on their map and keep you posted.</p>
+                            <button class="btn btn-primary rounded-pill px-4  " onclick="requestLocation()">Share Location!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="nnm nav-bar">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-bookmark"></i>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-bell"></i>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function requestLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Handle success
+                        alert('Location shared successfully!');
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('locationModal'));
+                        modal.hide();
+                    },
+                    (error) => {
+                        // Handle error
+                        alert('Error getting location. Please check your permissions.');
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Add search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const userItems = document.querySelectorAll('.user-item');
+            
+            userItems.forEach(item => {
+                const userName = item.querySelector('.user-name').textContent.toLowerCase();
+                if (userName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Add navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
